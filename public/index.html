@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GioEnriqueDev - Email System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="brand">
+                <h1>GioEnrique<span>Dev</span></h1>
+                <div class="mode-switcher">
+                    <button class="mode-btn active" onclick="switchMode('single')">Single</button>
+                    <button class="mode-btn" onclick="switchMode('bulk')">Bulk</button>
+                </div>
+            </div>
+            <div id="serverStatus" class="server-status server-offline">
+                <span class="status-dot">●</span> Offline
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- SINGLE EMAIL EDITOR -->
+            <div id="singleSection" class="editor-panel">
+                <div class="instructions">
+                    <h3>🚀 Ready to Launch</h3>
+                    <p>Welcome to the <strong>GioEnriqueDev Email System</strong>. This tool generates Gmail-compatible
+                        HTML emails that render perfectly on all devices.</p>
+                </div>
+
+                <div class="quick-actions">
+                    <button onclick="fillTestData()">⚡ Auto-Fill Test Data</button>
+                    <button onclick="checkServer()">🔄 Check Server</button>
+                    <button onclick="clearAll()">🗑️ Clear All</button>
+                </div>
+
+                <div id="statusMessage" class="status-message"></div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="badge">🏷️ Badge Text</label>
+                        <input type="text" id="badge" value="Special Offer" placeholder="e.g. NEW ARRIVAL">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mainContent">📝 Main Message</label>
+                        <textarea id="mainContent"
+                            placeholder="Write your main message here...">We are excited to announce our latest update. This is a premium email template designed for professionals.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="highlightContent">⭐ Highlight Box</label>
+                        <textarea id="highlightContent"
+                            placeholder="Important callout or feature...">Key Feature: 100% Gmail Compatible HTML Structure.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalDetails">📋 Additional Details</label>
+                        <textarea id="additionalDetails"
+                            placeholder="Extra information...">Our system ensures your emails look great on mobile and desktop devices.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conclusion">🎯 Conclusion</label>
+                        <textarea id="conclusion"
+                            placeholder="Closing remarks...">Thank you for choosing GioEnriqueDev.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ctaText">🔘 Button Text</label>
+                        <input type="text" id="ctaText" value="Get Started" placeholder="e.g. CLICK HERE">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailContact">📧 Contact Email (for button)</label>
+                        <select id="emailContact">
+                            <option value="info@gioenriquedev.com">info@gioenriquedev.com</option>
+                            <option value="support@gioenriquedev.com">support@gioenriquedev.com</option>
+                            <option value="sales@gioenriquedev.com">sales@gioenriquedev.com</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">📬 Email Subject</label>
+                        <input type="text" id="emailSubject" value="Welcome to GioEnriqueDev"
+                            placeholder="Subject Line">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signature">✍️ Signature Name</label>
+                        <input type="text" id="signature" value="The GioEnriqueDev Team" placeholder="e.g. John Doe">
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group">
+                        <label for="recipientEmail">👤 Recipient Email</label>
+                        <input type="email" id="recipientEmail" placeholder="client@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipientName">👤 Recipient Name</label>
+                        <input type="text" id="recipientName" placeholder="Client Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderName">👨‍💻 Your Name</label>
+                        <input type="text" id="senderName" placeholder="Your Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderEmail">📧 Your Email</label>
+                        <select id="senderEmail">
+                            <option value="">Select Sender Email</option>
+                            <option value="info@gioenriquedev.com">info@gioenriquedev.com</option>
+                            <option value="support@gioenriquedev.com">support@gioenriquedev.com</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" id="sendBtn" onclick="sendEmail()">
+                            📤 Send Email
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="generateEmail()">
+                            📋 Get HTML Code
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- BULK EMAIL EDITOR -->
+            <div id="bulkSection" class="editor-panel" style="display: none;">
+                <div class="instructions">
+                    <h3>📤 Bulk Operations</h3>
+                    <p>Send personalized emails to multiple recipients. Import your list via CSV.</p>
+                </div>
+
+                <div class="recipients-section">
+                    <div style="margin-bottom: 20px;">
+                        <div class="csv-upload-area" ondrop="handleCSVDrop(event)" ondragover="handleCSVDragOver(event)"
+                            ondragleave="handleCSVDragLeave(event)">
+                            <p><strong>📂 Drag & Drop CSV File</strong></p>
+                            <p style="font-size: 12px; color: #888; margin-top: 5px;">Format: email, nome, azienda,
+                                cognome</p>
+                            <input type="file" id="csvFile" accept=".csv" onchange="handleCSVUpload(event)"
+                                style="display: none;">
+                            <button onclick="document.getElementById('csvFile').click()" class="btn btn-secondary"
+                                style="margin-top: 15px; width: auto;">Browse Files</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px;">
+                            <input type="email" id="manualEmail" placeholder="Email"
+                                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; color: white; border-radius: 6px;">
+                            <input type="text" id="manualName" placeholder="Name"
+                                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; color: white; border-radius: 6px;">
+                            <input type="text" id="manualCompany" placeholder="Company"
+                                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; color: white; border-radius: 6px;">
+                            <button onclick="addManualRecipient()"
+                                style="background: var(--primary-color); border: none; border-radius: 6px; cursor: pointer;">➕</button>
+                        </div>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h4 style="color: white; font-size: 14px;">Recipients (<span id="recipientCount">0</span>)</h4>
+                        <button onclick="clearAllRecipients()"
+                            style="background: transparent; border: none; color: #ff3b30; cursor: pointer; font-size: 12px;">Clear
+                            All</button>
+                    </div>
+
+                    <div id="recipientsList"
+                        style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div style="padding: 20px; text-align: center; color: #666;">No recipients yet</div>
+                    </div>
+                </div>
+
+                <div id="bulkStatusMessage" class="status-message"></div>
+
+                <form id="bulkEmailForm">
+                    <!-- Bulk fields similar to single but with variable support hints -->
+                    <div class="form-group">
+                        <label>🏷️ Badge</label>
+                        <input type="text" id="bulkBadge" value="Special Offer">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Main Content (Use {{nome}}, {{azienda}})</label>
+                        <textarea
+                            id="bulkMainContent">Hello {{nome}}, we have something special for {{azienda}}.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>⭐ Highlight</label>
+                        <textarea id="bulkHighlightContent">Exclusive Access.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📋 Details</label>
+                        <textarea id="bulkAdditionalDetails">Details here.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🎯 Conclusion</label>
+                        <textarea id="bulkConclusion">Best regards.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🔘 Button</label>
+                        <input type="text" id="bulkCtaText" value="Learn More">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📧 Contact Email</label>
+                        <select id="bulkEmailContact">
+                            <option value="info@gioenriquedev.com">info@gioenriquedev.com</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📬 Subject (Use {{nome}})</label>
+                        <input type="text" id="bulkEmailSubject" value="Update for {{nome}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>✍️ Signature</label>
+                        <input type="text" id="bulkSignature" value="GioEnriqueDev Team">
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group">
+                        <label>👨‍💻 Sender Name</label>
+                        <input type="text" id="bulkSenderName">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📧 Sender Email</label>
+                        <select id="bulkSenderEmail">
+                            <option value="">Select Email</option>
+                            <option value="info@gioenriquedev.com">info@gioenriquedev.com</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>⏱️ Interval (Seconds)</label>
+                        <select id="sendInterval">
+                            <option value="2">2 Seconds</option>
+                            <option value="5">5 Seconds</option>
+                        </select>
+                    </div>
+
+                    <!-- Progress Area -->
+                    <div id="bulkProgress" style="display: none; margin-top: 20px;">
+                        <h4 style="color: white; margin-bottom: 10px;">Sending Progress</h4>
+                        <div class="progress-bar-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div id="totalEmails" class="stat-number" style="color: white;">0</div>
+                                <div style="font-size: 10px; color: #888;">TOTAL</div>
+                            </div>
+                            <div class="stat-card">
+                                <div id="sentEmails" class="stat-number" style="color: var(--primary-color);">0</div>
+                                <div style="font-size: 10px; color: #888;">SENT</div>
+                            </div>
+                            <div class="stat-card">
+                                <div id="failedEmails" class="stat-number" style="color: #ff3b30;">0</div>
+                                <div style="font-size: 10px; color: #888;">FAILED</div>
+                            </div>
+                            <div class="stat-card">
+                                <div id="remainingEmails" class="stat-number" style="color: #00ccff;">0</div>
+                                <div style="font-size: 10px; color: #888;">REMAINING</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" id="startBulkBtn" onclick="startBulkSend()" class="btn btn-primary">🚀
+                            Start Campaign</button>
+                        <button type="button" id="stopBulkBtn" onclick="stopBulkSend()" class="btn btn-secondary"
+                            style="display: none; color: #ff3b30; border-color: #ff3b30;">⏹️ Stop</button>
+                        <button type="button" onclick="previewBulkEmail()" class="btn btn-secondary">👁️
+                            Preview</button>
+                        <button type="button" onclick="resetBulkForm()" class="btn btn-secondary">🔄 Reset</button>
+                    </div>
+                </form>
+
+                <div id="bulkLogs" style="margin-top: 20px; display: none;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <h4 style="color: white;">Logs</h4>
+                        <button onclick="clearBulkLogs()"
+                            style="background: transparent; border: none; color: #ff3b30; cursor: pointer;">Clear</button>
+                    </div>
+                    <div id="logContainer" class="code-output" style="height: 200px;"></div>
+                </div>
+            </div>
+
+            <!-- PREVIEW PANEL -->
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-title">
+                        <span>📱 Live Preview</span>
+                        <span style="opacity: 0.5;">Gmail Compatible Mode</span>
+                    </div>
+                    <div id="emailPreview" class="email-preview">
+                        <!-- Preview Content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CODE MODAL -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: white; margin-bottom: 20px;">📋 HTML Source Code</h3>
+            <p style="color: #888; margin-bottom: 15px;">Copy this code and paste it into your email client.</p>
+            <div id="generatedCode" class="code-output"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="copyCode()">Copy Code</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

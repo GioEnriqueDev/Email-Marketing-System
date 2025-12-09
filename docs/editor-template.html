@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Template Email - Flex Trade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f7f5 0%, #e8f5e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(67, 176, 71, 0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 80vh;
+        }
+
+        .editor-panel {
+            padding: 40px;
+            background: #fafafa;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .preview-panel {
+            padding: 40px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #43b047;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #43b047 0%, #2d5016 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(67, 176, 71, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #2d3436;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e8f5e8;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        hr::after {
+            content: "📧 INVIO DIRETTO";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fafafa;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #43b047;
+            letter-spacing: 1px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-loading {
+            background: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #43b047;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .preview-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .preview-title {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #2d3436;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 14px;
+        }
+
+        .email-preview {
+            transform: scale(0.7);
+            transform-origin: top left;
+            width: 142.857%;
+            height: auto;
+        }
+
+        .instructions {
+            background: #e8f5e8;
+            border-left: 4px solid #43b047;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .instructions h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .editor-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .email-preview {
+                transform: scale(1);
+                width: 100%;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+
+        .code-output {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Editor Template Email</h1>
+            <p>Crea e personalizza le tue email aziendali in modo semplice e veloce</p>
+        </div>
+
+        <div class="content">
+            <div class="editor-panel">
+                <div class="instructions">
+                    <h3>📝 Come utilizzare l'editor</h3>
+                    <p>Compila i campi qui accanto per personalizzare la tua email. L'anteprima si aggiorna automaticamente. Puoi <strong>inviare direttamente</strong> l'email al cliente o generare il codice per Gmail.</p>
+                </div>
+
+                <div id="statusMessage" class="status-message"></div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="badge">🏷️ Badge Header</label>
+                        <input type="text" id="badge" value="Nouvelle Collection Militaire" placeholder="es: Offre Spéciale">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mainContent">📄 Contenuto Principale</label>
+                        <textarea id="mainContent" placeholder="Descrivi qui il prodotto o servizio che vuoi promuovere">Nous sommes heureux de vous annoncer que nous venons de recevoir un nouveau stock de vêtements militaires. Nous avons une large sélection de vêtements de haute qualité, allant des uniformes complets aux accessoires tels que des sacs à dos, des casquettes et des gants.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="highlightContent">⭐ Contenuto Evidenziato</label>
+                        <textarea id="highlightContent" placeholder="Call-to-action o informazioni importanti">Si vous êtes intéressé par notre nouvelle collection, n'hésitez pas à nous contacter par e-mail. Nous serons ravis de répondre à vos questions et de vous fournir toutes les informations dont vous avez besoin.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalDetails">📋 Dettagli Aggiuntivi</label>
+                        <textarea id="additionalDetails" placeholder="Informazioni supplementari">Nos produits sont conçus pour les professionnels et les amateurs de militaria, et sont disponibles à des prix compétitifs.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conclusion">🎯 Conclusione</label>
+                        <textarea id="conclusion" placeholder="Messaggio di chiusura">Nous espérons que vous trouverez ce que vous cherchez et que vous apprécierez nos produits.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ctaText">🔘 Testo Bottone</label>
+                        <input type="text" id="ctaText" value="Contactez-nous" placeholder="es: Demander Info">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailContact">📧 Email di Contatto</label>
+                        <select id="emailContact">
+                            <option value="info">info@flextrade.it</option>
+                            <option value="contact">contact@flextrade.it</option>
+                            <option value="commercial">commercial@flextrade.it</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailSubject">📋 Oggetto Email</label>
+                        <input type="text" id="emailSubject" value="Demande d'information - Vêtements militaires" placeholder="Oggetto dell'email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signature">✍️ Firma</label>
+                        <input type="text" id="signature" value="L'équipe FLEX TRADE" placeholder="es: Mario Rossi - FLEX TRADE">
+                    </div>
+
+                    <hr style="margin: 30px 0; border: 1px solid #e0e0e0;">
+
+                    <div class="form-group">
+                        <label for="recipientEmail">👤 Email Destinatario</label>
+                        <input type="email" id="recipientEmail" placeholder="cliente@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipientName">📝 Nome Destinatario (opzionale)</label>
+                        <input type="text" id="recipientName" placeholder="Nome del cliente">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderName">👨‍💼 Il tuo Nome</label>
+                        <input type="text" id="senderName" placeholder="Il tuo nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senderEmail">📧 La tua Email</label>
+                        <select id="senderEmail" required>
+                            <option value="">Seleziona la tua email</option>
+                            <option value="info@flextrade.it">info@flextrade.it</option>
+                            <option value="contact@flextrade.it">contact@flextrade.it</option>
+                            <option value="commercial@flextrade.it">commercial@flextrade.it</option>
+                            <option value="admin@flextrade.it">admin@flextrade.it</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" onclick="sendEmailDirect()">📤 Invia Email Direttamente</button>
+                        <button type="button" class="btn btn-secondary" onclick="generateEmail()">� Genera Codice</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="preview-panel">
+                <div class="preview-container">
+                    <div class="preview-title">📱 Anteprima Email</div>
+                    <div id="emailPreview" class="email-preview">
+                        <!-- L'anteprima verrà inserita qui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per il codice generato -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <h3>📧 Codice Email Generato</h3>
+            <p>Copia tutto il codice qui sotto e incollalo in Gmail usando il pulsante HTML (<code>&lt;&gt;</code>):</p>
+            <div id="generatedCode" class="code-output"></div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="copyCode()">📋 Copia Codice</button>
+                <button class="btn btn-secondary" onclick="closeModal()">❌ Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sostituito con template 100% Gmail-friendly (tabelle + CSS inline)
+        const emailTemplate = `<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <title>Flex Trade</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#f4f7f5;">
+    <div style="display:none; overflow:hidden; line-height:1px; opacity:0; max-height:0; max-width:0; color:transparent;">{{PREHEADER}}</div>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" bgcolor="#f4f7f5" style="border-collapse:collapse; background-color:#f4f7f5;">
+      <tr>
+        <td align="center" style="padding:16px;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px; max-width:600px; border-collapse:collapse;">
+            <!-- Header -->
+            <tr>
+              <td bgcolor="#2d5016" align="center" style="padding:30px 20px; color:#ffffff;">
+                <div style="font-family:Segoe UI, Arial, sans-serif; font-size:40px; font-weight:800; letter-spacing:2px; text-transform:uppercase; line-height:1;">FLEX</div>
+                <div style="font-family:Segoe UI, Arial, sans-serif; font-size:16px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#d9ead3; margin-top:4px;">TRADE</div>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:12px;">
+                  <tr>
+                    <td style="border:2px solid #ffffff; padding:6px 12px; color:#ffffff; font-family:Segoe UI, Arial, sans-serif; font-size:12px; font-weight:700; text-transform:uppercase; border-radius:20px;">{{BADGE}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Intro + Main -->
+            <tr>
+              <td bgcolor="#ffffff" align="left" style="padding:24px; font-family:Segoe UI, Arial, sans-serif; color:#2d3436; font-size:16px; line-height:1.6;">
+                <p style="margin:0 0 16px 0;"><strong>Bonjour,</strong></p>
+                <p style="margin:0;">{{MAIN_CONTENT}}</p>
+              </td>
+            </tr>
+
+            <!-- Highlight box -->
+            <tr>
+              <td bgcolor="#ffffff" align="left" style="padding:0 24px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse; background-color:#e8f5e8; border:1px solid #d7ecd7;">
+                  <tr>
+                    <td width="6" bgcolor="#43b047" style="width:6px; font-size:0; line-height:0;">&nbsp;</td>
+                    <td style="padding:16px; font-family:Segoe UI, Arial, sans-serif; color:#2d3436; font-size:16px; line-height:1.6;">{{HIGHLIGHT_CONTENT}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Additional + Conclusion -->
+            <tr>
+              <td bgcolor="#ffffff" align="left" style="padding:16px 24px; font-family:Segoe UI, Arial, sans-serif; color:#2d3436; font-size:16px; line-height:1.6;">
+                <p style="margin:0 0 16px 0;">{{ADDITIONAL_DETAILS}}</p>
+                <p style="margin:0;">{{CONCLUSION}}</p>
+              </td>
+            </tr>
+
+            <!-- CTA Button -->
+            <tr>
+              <td bgcolor="#ffffff" align="center" style="padding:8px 24px 28px 24px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td align="center" bgcolor="#43b047" style="border-radius:28px;">
+                      <a href="mailto:{{EMAIL_CONTACT}}@flextrade.it?subject={{EMAIL_SUBJECT}}" target="_blank" style="font-family:Segoe UI, Arial, sans-serif; font-size:16px; color:#ffffff; text-decoration:none; padding:14px 28px; display:inline-block;">{{CTA_TEXT}}</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Signature -->
+            <tr>
+              <td bgcolor="#ffffff" align="left" style="padding:0 24px 24px 24px; font-family:Segoe UI, Arial, sans-serif; color:#2d3436; font-size:16px; line-height:1.6;">
+                <p style="margin:0;">Cordialement,<br><strong>{{SIGNATURE}}</strong></p>
+              </td>
+            </tr>
+
+            <!-- Partners -->
+            <tr>
+              <td bgcolor="#ffffff" align="center" style="padding:20px 24px 8px 24px; border-top:1px solid #e8f5e8;">
+                <div style="font-family:Segoe UI, Arial, sans-serif; font-size:12px; color:#636e72; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Nos Partenaires de Confiance</div>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td align="center" width="25%" style="padding:8px;">
+                      <img src="https://www.ivecodefencevehicles.com/themes/custom/iveco_defence/logo.png" width="100" style="display:block; width:100px; max-width:100%; height:auto; border:0; outline:none; text-decoration:none;" alt="IVECO Defence" />
+                    </td>
+                    <td align="center" width="25%" style="padding:8px;">
+                      <img src="https://www.coelmo.it/wp-content/uploads/2021/03/logo-coelmo.png" width="100" style="display:block; width:100px; max-width:100%; height:auto; border:0; outline:none; text-decoration:none;" alt="COELMO" />
+                    </td>
+                    <td align="center" width="25%" style="padding:8px;">
+                      <img src="https://www.hytera.com/themes/hytera/images/logo.png" width="100" style="display:block; width:100px; max-width:100%; height:auto; border:0; outline:none; text-decoration:none;" alt="Hytera" />
+                    </td>
+                    <td align="center" width="25%" style="padding:8px;">
+                      <img src="https://www.eaglesecurity.it/wp-content/uploads/2021/03/logo-eagle.png" width="100" style="display:block; width:100px; max-width:100%; height:auto; border:0; outline:none; text-decoration:none;" alt="Eagle Security" />
+                    </td>
+                  </tr>
+                </table>
+                <div style="font-family:Segoe UI, Arial, sans-serif; font-size:14px; color:#636e72; margin-top:12px;">Découvrez notre site web en <a href="https://flextrade.it" target="_blank" rel="noopener" style="color:#43b047; text-decoration:none; font-weight:600;">cliquant ici</a></div>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td align="center" style="padding:16px; font-family:Segoe UI, Arial, sans-serif; font-size:12px; color:#9aa0a6;">© Flex Trade</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+
+        // Helper per sanificare testo e gestire \n
+        function escapeHtml(str) {
+            return (str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        function nl2br(str) { return escapeHtml(str).replace(/\n/g, '<br>'); }
+
+        // Funzione per inviare email direttamente
+        async function sendEmailDirect() {
+            // Validazione campi
+            const recipientEmail = document.getElementById('recipientEmail').value;
+            const senderName = document.getElementById('senderName').value;
+            const senderEmail = document.getElementById('senderEmail').value;
+            const emailSubject = document.getElementById('emailSubject').value;
+
+            if (!recipientEmail || !senderName || !senderEmail) {
+                showStatus('error', '❌ Compila tutti i campi obbligatori per l\'invio diretto!');
+                return;
+            }
+
+            if (!isValidEmail(recipientEmail)) {
+                showStatus('error', '❌ Inserisci un indirizzo email valido per il destinatario!');
+                return;
+            }
+
+            // Mostra loading
+            showStatus('loading', '<span class="loading-spinner"></span>Invio email in corso...');
+
+            try {
+                // Genera l'HTML dell'email
+                updatePreview();
+                const emailHTML = document.getElementById('emailPreview').innerHTML;
+                
+                // Prepara i dati per l'invio
+                const emailData = {
+                    to: recipientEmail,
+                    from: senderEmail,
+                    fromName: senderName,
+                    subject: emailSubject,
+                    html: emailHTML,
+                    recipientName: document.getElementById('recipientName').value || 'Cliente'
+                };
+
+                // Simula invio email (in produzione collegheresti a un servizio email)
+                await simulateEmailSend(emailData);
+
+                showStatus('success', `✅ Email inviata con successo a ${recipientEmail}!`);
+                
+                // Log per debug
+                console.log('Email inviata:', emailData);
+
+            } catch (error) {
+                showStatus('error', '❌ Errore durante l\'invio dell\'email. Riprova o usa il metodo manuale.');
+                console.error('Errore invio email:', error);
+            }
+        }
+
+        // Funzione per simulare l'invio email (sostituire con servizio reale)
+        async function simulateEmailSend(emailData) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simula successo (95% delle volte)
+                    if (Math.random() > 0.05) {
+                        resolve(emailData);
+                    } else {
+                        reject(new Error('Errore simulato di rete'));
+                    }
+                }, 2000); // Simula 2 secondi di attesa
+            });
+        }
+
+        // Funzione per mostrare messaggi di stato
+        function showStatus(type, message) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.className = `status-message status-${type}`;
+            statusEl.innerHTML = message;
+            statusEl.style.display = 'block';
+
+            // Auto-nascondi dopo 5 secondi per successo/errore
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Funzione per validare email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Sostituito updatePreview per usare template inline + preheader
+        function updatePreview() {
+            const badge = document.getElementById('badge').value || '';
+            const mainContent = document.getElementById('mainContent').value || '';
+            const highlightContent = document.getElementById('highlightContent').value || '';
+            const additionalDetails = document.getElementById('additionalDetails').value || '';
+            const conclusion = document.getElementById('conclusion').value || '';
+            const ctaText = document.getElementById('ctaText').value || '';
+            const emailContact = document.getElementById('emailContact').value || '';
+            const emailSubjectRaw = document.getElementById('emailSubject').value || '';
+            const signature = document.getElementById('signature').value || '';
+
+            const preheader = escapeHtml(mainContent).replace(/\s+/g, ' ').trim().slice(0, 140);
+            const emailSubject = encodeURIComponent(emailSubjectRaw);
+
+            let html = emailTemplate
+                .replace(/{{PREHEADER}}/g, preheader)
+                .replace(/{{BADGE}}/g, escapeHtml(badge))
+                .replace(/{{MAIN_CONTENT}}/g, nl2br(mainContent))
+                .replace(/{{HIGHLIGHT_CONTENT}}/g, nl2br(highlightContent))
+                .replace(/{{ADDITIONAL_DETAILS}}/g, nl2br(additionalDetails))
+                .replace(/{{CONCLUSION}}/g, nl2br(conclusion))
+                .replace(/{{CTA_TEXT}}/g, escapeHtml(ctaText))
+                .replace(/{{EMAIL_CONTACT}}/g, escapeHtml(emailContact))
+                .replace(/{{EMAIL_SUBJECT}}/g, emailSubject)
+                .replace(/{{SIGNATURE}}/g, escapeHtml(signature));
+
+            document.getElementById('emailPreview').innerHTML = html;
+        }
+
+        // Funzione per generare l'email
+        function generateEmail() {
+            updatePreview();
+            document.getElementById('generatedCode').textContent = document.getElementById('emailPreview').innerHTML;
+            document.getElementById('codeModal').style.display = 'block';
+        }
+
+        // Funzione per copiare il codice
+        function copyCode() {
+            const code = document.getElementById('generatedCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Codice copiato! Ora puoi incollarlo in Gmail.');
+            });
+        }
+
+        // Funzione per chiudere il modal
+        function closeModal() {
+            document.getElementById('codeModal').style.display = 'none';
+        }
+
+        // Funzione per resettare il form
+        function resetForm() {
+            if (confirm('Sei sicuro di voler resettare tutti i campi?')) {
+                document.getElementById('emailForm').reset();
+                // Ripristina valori di default
+                document.getElementById('badge').value = 'Nouvelle Collection Militaire';
+                document.getElementById('mainContent').value = 'Nous sommes heureux de vous annoncer que nous venons de recevoir un nouveau stock de vêtements militaires. Nous avons une large sélection de vêtements de haute qualité, allant des uniformes complets aux accessoires tels que des sacs à dos, des casquettes et des gants.';
+                document.getElementById('highlightContent').value = 'Si vous êtes intéressé par notre nouvelle collection, n\'hésitez pas à nous contacter par e-mail. Nous serons ravis de répondre à vos questions et de vous fournir toutes les informations dont vous avez besoin.';
+                document.getElementById('additionalDetails').value = 'Nos produits sont conçus pour les professionnels et les amateurs de militaria, et sont disponibles à des prix compétitifs.';
+                document.getElementById('conclusion').value = 'Nous espérons que vous trouverez ce que vous cherchez et que vous apprécierez nos produits.';
+                document.getElementById('ctaText').value = 'Contactez-nous';
+                document.getElementById('emailSubject').value = 'Demande d\'information - Vêtements militaires';
+                document.getElementById('signature').value = 'L\'équipe FLEX TRADE';
+                
+                updatePreview();
+                showStatus('success', '✅ Modulo resettato ai valori di default!');
+            }
+        }
+
+        // Event listeners per aggiornamento automatico
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
+            
+            const inputs = document.querySelectorAll('#emailForm input, #emailForm textarea, #emailForm select');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
+                input.addEventListener('change', updatePreview);
+            });
+
+            // Chiudi modal con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            // Chiudi modal cliccando fuori
+            document.getElementById('codeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

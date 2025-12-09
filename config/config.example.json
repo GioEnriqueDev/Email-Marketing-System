@@ -1,0 +1,16 @@
+{
+    "email": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "secure": false,
+        "user": "YOUR_EMAIL@gmail.com",
+        "pass": "YOUR_APP_PASSWORD"
+    },
+    "server": {
+        "port": 3000
+    },
+    "defaults": {
+        "fromName": "My Company",
+        "replyTo": "info@mycompany.com"
+    }
+}

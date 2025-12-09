@@ -1,0 +1,16 @@
+{
+    "email": {
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "secure": false,
+        "user": "swede.exe@gmail.com",
+        "pass": "oknt yjde cuno jmkv"
+    },
+    "server": {
+        "port": 3000
+    },
+    "defaults": {
+        "fromName": "Email System",
+        "replyTo": "info@example.com"
+    }
+}
