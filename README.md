@@ -9,9 +9,7 @@ A glance at the system in action, from dashboard to inbox.
 
 | **Intuitive Dashboard & Live Preview** | **Final Email in Client's Inbox (Gmail)** |
 |:---:|:---:|
-| ![Dashboard with Live Preview](<img width="1366" height="673" alt="image" src="https://github.com/user-attachments/assets/d68196de-7170-4ba5-a57d-0ff36a39e315" />
-) | ![Email received in Gmail](<img width="1361" height="683" alt="image" src="https://github.com/user-attachments/assets/ffb2c58d-9fd8-4f16-bc03-137db794975a" />
-) |
+| <img src="https://github.com/user-attachments/assets/d68196de-7170-4ba5-a57d-0ff36a39e315" alt="Dashboard" width="100%" /> | <img src="https://github.com/user-attachments/assets/ffb2c58d-9fd8-4f16-bc03-137db794975a" alt="Gmail Inbox" width="100%" /> |
 | *The main interface where you compose and preview your emails in real-time.* | *The professional, responsive result as seen by the recipient.* |
 
 ---
@@ -42,7 +40,7 @@ The system is designed for a quick setup, with clear feedback directly in the te
     ```
 You will see the installation progress as shown below:
 
-![Terminal Installation Process]<img width="999" height="521" alt="image" src="https://github.com/user-attachments/assets/93099d21-4457-47e0-b026-682f29426601" />
+<img src="https://github.com/user-attachments/assets/93099d21-4457-47e0-b026-682f29426601" alt="Terminal Installation" />
 
 ### 3. Configuration (One-time setup)
 1.  Navigate to the `config` folder.
@@ -67,4 +65,3 @@ You will see the installation progress as shown below:
 ## ⚖️ License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
