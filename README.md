@@ -1,89 +1,87 @@
-# 📧 Sistema Email Marketing Professionale
+# 📧 Professional Email Marketing System
 
-Un sistema completo, sicuro e facile da usare per l'invio di email professionali e newsletter.
-Progettato per essere semplice ("Zero Configurazione" per l'uso quotidiano) ma potente.
+A complete, secure, and user-friendly system for sending professional emails and newsletters.
+Designed to be simple ("Zero Configuration" for daily use) yet powerful for business needs.
 
-## 🚀 Caratteristiche Principali
+## 🚀 Key Features
 
-*   **Interfaccia Intuitiva**: Editor visivo semplice e pulito.
-*   **Anteprima Live**: Vedi esattamente come apparirà l'email mentre la scrivi.
-*   **Invio Singolo**: Invia email personalizzate a singoli clienti rapidamente.
-*   **Invio Massivo (BULK)**:
-    *   Importazione destinatari da **CSV**.
-    *   Personalizzazione dinamica (es. "Ciao {{nome}}").
-    *   Invio sequenziale con intervallo di sicurezza (anti-spam).
-    *   Log dettagliati degli invii.
-*   **Template Professionale**: Design responsive compatibile con Gmail, Outlook, Apple Mail, ecc.
-*   **Sicurezza**: Credenziali separate dal codice.
-
----
-
-## 📂 Struttura del Progetto
-
-Il workspace è stato riorganizzato per garantire ordine e manutenibilità:
-
-*   `START.bat`: **Doppio click qui per avviare il sistema.**
-*   `config/`: Contiene i file di configurazione.
-    *   `config.json`: Le tue credenziali (NON condividere questo file).
-    *   `config.example.json`: Esempio di configurazione.
-*   `public/`: File del sito web (HTML, CSS, JS).
-*   `src/`: Codice del server (Backend).
-*   `scripts/`: Script di avvio e utilità.
-*   `docs/`: Vecchia documentazione e guide.
+* **Intuitive Interface**: Clean visual editor.
+* **Live Preview**: See exactly how the email looks while typing.
+* **Single Send**: Quickly send personalized emails to individual clients.
+* **Bulk Sending**:
+    * Import recipients via **CSV**.
+    * Dynamic personalization (e.g., "Hi {{name}}").
+    * Sequential sending with safety intervals (anti-spam throttling).
+    * Detailed sending logs.
+* **Professional Templates**: Responsive design compatible with Gmail, Outlook, Apple Mail, etc.
+* **Security**: Credentials are strictly separated from the source code.
 
 ---
 
-## 🛠️ Installazione e Configurazione
+## 📂 Project Structure
 
-### 1. Requisiti
-*   **Node.js** installato sul computer.
+The workspace is organized for scalability and maintainability:
 
-### 2. Prima Configurazione (Solo la prima volta)
-1.  Vai nella cartella `config`.
-2.  Copia il file `config.example.json` e rinominalo in `config.json`.
-3.  Apri `config.json` con un editor di testo (es. Blocco Note).
-4.  Inserisci le tue credenziali email:
+* `START.bat`: **Double-click here to launch the system.**
+* `config/`: Configuration files.
+    * `config.json`: Your credentials (NOT tracked by git).
+    * `config.example.json`: Configuration template.
+* `public/`: Frontend files (HTML, CSS, JS).
+* `src/`: Server-side code (Node.js Backend).
+* `scripts/`: Startup and utility scripts.
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Requirements
+* **Node.js** installed on your machine.
+
+### 2. First Configuration (One-time setup)
+1.  Navigate to the `config` folder.
+2.  Copy `config.example.json` and rename it to `config.json`.
+3.  Open `config.json` with a text editor.
+4.  Enter your email credentials:
     ```json
-    "user": "tua@email.com",
-    "pass": "tua-password-app"
+    "user": "your@email.com",
+    "pass": "your-app-password"
     ```
-    > **NOTA**: Se usi Gmail, devi usare una "Password per le app" (App Password), non la tua password normale.
+    > **NOTE**: If using Gmail, you must use an **App Password**, not your standard password.
 
-### 3. Avvio
-1.  Fai doppio click su **`START.bat`**.
-2.  Il browser si aprirà automaticamente su `http://localhost:3000`.
-
----
-
-## 📖 Guida all'Uso
-
-### Invio Singolo
-1.  Compila i campi (Oggetto, Contenuto, ecc.).
-2.  Inserisci l'email del destinatario.
-3.  Clicca su **"📤 Invia Email"**.
-
-### Invio Massivo (BULK)
-1.  Clicca sul pulsante **"📤 Bulk"** in alto a sinistra.
-2.  **Importa Destinatari**:
-    *   Trascina un file CSV nell'area dedicata.
-    *   Formato CSV richiesto: `email,nome,azienda,cognome`.
-3.  **Personalizza il Messaggio**:
-    *   Usa i tag `{{nome}}`, `{{azienda}}` nel testo. Verranno sostituiti automaticamente.
-4.  **Invia**:
-    *   Clicca **"🚀 Inizia Invio BULK"**.
-    *   Il sistema invierà le email una alla volta rispettando l'intervallo scelto.
+### 3. Usage
+1.  Double-click on **`START.bat`**.
+2.  The browser will automatically open at `http://localhost:3000`.
 
 ---
 
-## 🔒 Sicurezza
-*   Le password non sono più nel codice sorgente ma nel file `config/config.json`.
-*   Questo file è escluso dalla condivisione (se si usa git, aggiungerlo al .gitignore).
+## 📖 User Guide
 
-## ❓ Risoluzione Problemi
-*   **Server Offline?**: Assicurati di aver avviato `START.bat` e non chiudere la finestra nera che appare.
-*   **Errore Login?**: Controlla user e password in `config/config.json`.
-*   **Email non arrivano?**: Controlla la cartella Spam.
+### Single Send
+1.  Fill in the fields (Subject, Content, etc.).
+2.  Enter the recipient's email.
+3.  Click **"📤 Send Email"**.
+
+### Bulk Sending
+1.  Click the **"📤 Bulk"** button (top left).
+2.  **Import Recipients**:
+    * Drag & Drop a CSV file.
+    * Required CSV format: `email,name,company,lastname`.
+3.  **Personalize Message**:
+    * Use tags like `{{name}}`, `{{company}}` in the body. They will be replaced automatically.
+4.  **Send**:
+    * Click **"🚀 Start Bulk Send"**.
+    * The system sends emails one by one, respecting the safety interval.
 
 ---
 
-**Sistema Generalizzato v2.0**
+## 🔒 Security & Best Practices
+* **Credentials Safety**: Passwords are stored in `config/config.json` and are **never** committed to the repository (via `.gitignore`).
+
+## ❓ Troubleshooting
+* **Server Offline?**: Make sure `START.bat` is running and do not close the terminal window.
+* **Login Error?**: Check your credentials in `config/config.json`.
+* **Emails not arriving?**: Check the Spam folder.
+
+---
+
+**System Version 2.0 - Open Source**
