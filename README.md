@@ -42,7 +42,7 @@ The system is designed for a quick setup, with clear feedback directly in the te
     ```
 You will see the installation progress as shown below:
 
-![Terminal Installation Process](<img width="999" height="521" alt="image" src="https://github.com/user-attachments/assets/93099d21-4457-47e0-b026-682f29426601" />)
+![Terminal Installation Process]<img width="999" height="521" alt="image" src="https://github.com/user-attachments/assets/93099d21-4457-47e0-b026-682f29426601" />
 
 ### 3. Configuration (One-time setup)
 1.  Navigate to the `config` folder.
@@ -67,3 +67,4 @@ You will see the installation progress as shown below:
 ## ⚖️ License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
